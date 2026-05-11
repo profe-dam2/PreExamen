@@ -1,0 +1,108 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:PreExamen.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+        xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+        mc:Ignorable="d"
+        d:DesignWidth="800"
+        d:DesignHeight="450"
+        x:Class="PreExamen.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="PreExamen">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+    <Interaction.Behaviors>
+        <EventTriggerBehavior EventName="Loaded">
+            <InvokeCommandAction Command="{Binding CargarListaFrutasCommand}" />
+        </EventTriggerBehavior>
+    </Interaction.Behaviors>
+
+    <Grid>
+        <dialogHostAvalonia:DialogHost ZIndex="3"
+                                       Identifier="AppDialog"
+                                       CloseOnClickAway="True">
+            <dialogHostAvalonia:DialogHost.DialogContent />
+        </dialogHostAvalonia:DialogHost>
+        <Grid Background="WhiteSmoke"
+              ColumnDefinitions="*,*,*"
+              RowDefinitions="80,*,60">
+            <Button Grid.Column="1"
+                    Grid.Row="0"
+                    Content="CARRITO"
+                    Width="100"
+                    Height="50"
+                    Command="{Binding AbrirCarritoDialogCommand}" />
+
+
+            <ListBox Grid.Column="1"
+                     Grid.Row="1"
+                     ItemsSource="{Binding Frutas }"
+                     Name="ListaFrutas"
+                     HorizontalAlignment="Center"
+                     SelectionMode="Single, Toggle"
+                     SelectedItem="{Binding SelectedFruta }"
+                     Height="350"
+                     Width="600">
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem:selected controls|Card">
+                        <Setter Property="Background"
+                                Value="Aquamarine" />
+                        <Setter Property="BorderBrush"
+                                Value="Blue" />
+                        <Setter Property="BorderThickness"
+                                Value="2" />
+                    </Style>
+                </ListBox.Styles>
+
+                <ItemsControl.ItemTemplate>
+
+                    <DataTemplate>
+                        <controls:Card Width="150"
+                                       Height="150"
+                                       VerticalAlignment="Top">
+                            <StackPanel Margin="0,4"
+                                        Background="AliceBlue">
+                                <Image Width="70"
+                                       Height="70"
+                                       Margin="10"
+                                       Source="{Binding ImagePath}" />
+                                <TextBlock Foreground="Black"
+                                           FontWeight="Bold"
+                                           FontSize="20"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding Name}" />
+                            </StackPanel>
+                        </controls:Card>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ListBox>
+            <StackPanel Grid.Row="2"
+                        Grid.Column="1"
+                        Spacing="5"
+                        Orientation="Horizontal"
+                        Margin="10">
+                <TextBlock Text="CANTIDAD (kg):" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox Width="40" Text="{Binding SelectedFruta.CantidadKg}"/>
+                <Button Content="AGRAGAR AL CARRITO" Command="{Binding AnadirAlCarritoCommand}" />
+                
+            </StackPanel>
+
+        </Grid>
+    </Grid>
+
+</Window>
