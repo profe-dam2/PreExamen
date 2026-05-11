@@ -16,13 +16,34 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty] AvaloniaList<Fruta> _frutas=new();
     [ObservableProperty] Fruta _selectedFruta;
     [ObservableProperty] AvaloniaList<Fruta> _carritoFrutas=new();
-
+    [ObservableProperty] bool _isFrutaSelected;
+    [ObservableProperty] string _aviso;
+    [RelayCommand]
+    public void HabilitarAnadirCarrito()
+    {
+        if (SelectedFruta == null)
+        {
+            IsFrutaSelected = false;
+        }
+        else
+        {
+            IsFrutaSelected = true;
+        }
+    }
+    
     [RelayCommand]
     public void AbrirCarritoDialog()
     {
         CarritoDialog = new CarritoDialog(){DataContext = this};
         DialogHost.Show(CarritoDialog, "AppDialog");
+    }
 
+    private void AbrirAvisoDialog(string aviso)
+    { 
+        Aviso = aviso;
+        var dialog = new AvisoDialog(){DataContext = this};
+        DialogHost.Show(dialog, "AppDialog");
+        
     }
 
     [RelayCommand]
@@ -43,8 +64,17 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     public void AnadirAlCarrito()
     {
-        CarritoFrutas.Add(SelectedFruta);
-        SelectedFruta = new();
+        if (SelectedFruta.CantidadKg == null)
+        {
+           AbrirAvisoDialog("Debes indicar el peso!");
+            
+        }
+        else
+        {
+            CarritoFrutas.Add(SelectedFruta);
+            SelectedFruta = new();
+        }
+      
     }
     
 }

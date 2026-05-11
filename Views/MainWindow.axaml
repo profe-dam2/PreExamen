@@ -7,7 +7,8 @@
         xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
         mc:Ignorable="d"
         d:DesignWidth="800"
-        d:DesignHeight="450"
+        d:DesignHeight="750"
+        Height="750"
         x:Class="PreExamen.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
@@ -30,6 +31,7 @@
                                        CloseOnClickAway="True">
             <dialogHostAvalonia:DialogHost.DialogContent />
         </dialogHostAvalonia:DialogHost>
+        
         <Grid Background="WhiteSmoke"
               ColumnDefinitions="*,*,*"
               RowDefinitions="80,*,60">
@@ -50,6 +52,12 @@
                      SelectedItem="{Binding SelectedFruta }"
                      Height="350"
                      Width="600">
+                
+                <Interaction.Behaviors>
+                    <EventTriggerBehavior EventName="SelectionChanged">
+                        <InvokeCommandAction Command="{Binding HabilitarAnadirCarritoCommand}" />
+                    </EventTriggerBehavior>
+                </Interaction.Behaviors>
 
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -91,7 +99,7 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ListBox>
-            <StackPanel Grid.Row="2"
+            <StackPanel Grid.Row="2" IsVisible="{Binding IsFrutaSelected}"
                         Grid.Column="1"
                         Spacing="5"
                         Orientation="Horizontal"
